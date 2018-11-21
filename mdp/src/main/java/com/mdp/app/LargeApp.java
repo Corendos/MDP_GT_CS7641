@@ -25,18 +25,37 @@ import burlap.statehashing.simple.SimpleHashableStateFactory;
 /**
  * Hello world!
  */
-public final class App {
-    private App() {
+public final class LargeApp {
+    private LargeApp() {
     }
 
     public static final int WIDTH = 4;
     public static final int HEIGHT = 4;
 
-    public static final double[][] map = new double[][]{
-        {-0.04, -0.04,  -0.04,  -0.04},
-        {-0.04, -1.0,   -0.04,  -1.0},
-        {-0.04, -1.0,   -0.04,  -1.0},
-        {-0.04, -0.04,  -0.04,   1.0},
+    public static final int[][] map = new int[][]{
+        {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0},
+        {1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0},
+        {1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0},
+        {0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0},
+        {1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
+        {0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0},
+        {0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0},
+        {0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1},
+        {0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0},
+        {0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0},
+        {1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
+        {0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
+        {1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0},
+        {1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0},
+        {1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0},
+        {1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1},
+        {1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1},
+        {1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1},
+        {1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1},
+        {1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1},
+        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1},
+        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 2}
     };
 
     /**
@@ -53,10 +72,16 @@ public final class App {
         GridWorldRewardFunction rf = new GridWorldRewardFunction(width, height);
         for (int y = 0;y < height;y++) {
             for (int x = 0; x < width; x++) {
-                rf.setReward(x, y, map[y][x]);
+                if (map[y][x] == 1) {
+                    rf.setReward(x, y, -1.0);
+                } else if (map[y][x] == 0) {
+                    rf.setReward(x, y, -0.04);
+                } else if (map[y][x] == 2) {
+                    rf.setReward(x, y, 1.0);
+                }
             }
         }
-        TerminalFunction tf = new GridWorldTerminalFunction(3, 3);
+        TerminalFunction tf = new GridWorldTerminalFunction(23, 23);
 
         gw.setRf(rf);
         gw.setTf(tf);
@@ -75,7 +100,7 @@ public final class App {
         vi.toggleDebugPrinting(false);
         
         System.out.println("Value Iteration");
-        System.out.println("+---+---+---+---+");
+        System.out.println("+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+");
         for (int y = height - 1;y >= 0;y--) {
             System.out.print("|");
             for (int x = 0; x < width; x++) {
@@ -93,11 +118,11 @@ public final class App {
                 }
             }
             System.out.println();
-            System.out.println("+---+---+---+---+");
+            System.out.println("+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+");
         }
         
         System.out.println("Policy Iteration" + Integer.toString(pi.getTotalValueIterations()));
-        System.out.println("+---+---+---+---+");
+        System.out.println("+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+");
         for (int y = height - 1;y >= 0;y--) {
             System.out.print("|");
             for (int x = 0; x < width; x++) {
@@ -115,7 +140,7 @@ public final class App {
                 }
             }
             System.out.println();
-            System.out.println("+---+---+---+---+");
+            System.out.println("+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+");
         }
     }
 }
