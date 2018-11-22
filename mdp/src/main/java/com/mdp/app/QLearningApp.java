@@ -1,17 +1,26 @@
 package com.mdp.app;
 
 import burlap.behavior.policy.GreedyQPolicy;
-import burlap.behavior.singleagent.planning.stochastic.policyiteration.PolicyIteration;
-import burlap.behavior.singleagent.planning.stochastic.valueiteration.ValueIteration;
+import burlap.behavior.singleagent.auxiliary.performance.LearningAlgorithmExperimenter;
+import burlap.behavior.singleagent.auxiliary.performance.PerformanceMetric;
+import burlap.behavior.singleagent.auxiliary.performance.TrialMode;
+import burlap.behavior.singleagent.learning.LearningAgent;
+import burlap.behavior.singleagent.learning.LearningAgentFactory;
+import burlap.behavior.singleagent.learning.tdmethods.QLearning;
 import burlap.domain.singleagent.gridworld.GridWorldDomain;
 import burlap.domain.singleagent.gridworld.GridWorldRewardFunction;
 import burlap.domain.singleagent.gridworld.GridWorldTerminalFunction;
+import burlap.domain.singleagent.gridworld.GridWorldVisualizer;
 import burlap.domain.singleagent.gridworld.state.GridAgent;
 import burlap.domain.singleagent.gridworld.state.GridWorldState;
+import burlap.mdp.auxiliary.common.ConstantStateGenerator;
+import burlap.mdp.singleagent.environment.SimulatedEnvironment;
 import burlap.mdp.singleagent.oo.OOSADomain;
+import burlap.shell.visual.VisualExplorer;
 import burlap.statehashing.simple.SimpleHashableStateFactory;
+import burlap.visualizer.Visualizer;
 
-public final class App {
+public final class QLearningApp {
     public static final int[][] smallMapLayout = new int[][]{
         {0, 0, 0, 0},
         {0, 1, 0, 1},
@@ -48,7 +57,7 @@ public final class App {
     private static Map smallMap;
     private static Map largeMap;
 
-    private App() {}
+    private QLearningApp() {}
 
     /**
      * Main function
@@ -70,54 +79,41 @@ public final class App {
         map.fillRewardFunctionAndTerminalFunction(rf, tf);
         gw.setRf(rf);
         gw.setTf(tf);
-        
+
         OOSADomain domain = gw.generateDomain();
         SimpleHashableStateFactory hashingFactory = new SimpleHashableStateFactory();
 
         GridWorldState state = new GridWorldState(new GridAgent(0, 0, "Start"));
 
-        ValueIteration vi = new ValueIteration(domain, 0.99, hashingFactory, 0.01, 1000);
-        GreedyQPolicy viPolicy = vi.planFromState(state);
+        SimulatedEnvironment env = new SimulatedEnvironment(domain, state);
 
-        PolicyIteration pi = new PolicyIteration(domain, 0.99, hashingFactory, 0.01, 1000, 1000);
-        GreedyQPolicy piPolicy = pi.planFromState(state);
+        QLearning learner = new QLearning(domain, 0.9, hashingFactory, 10.0, 0.9);
+        learner.toggleDebugPrinting(true);
+        for (int i = 0;i < 100000000;i++) {
+            learner.runLearningEpisode(env);
+        }
 
-        vi.toggleDebugPrinting(true);
+        GreedyQPolicy policy = learner.planFromState(state);
 
-        MapWriter.Direction[][] viDirections = new MapWriter.Direction[map.getHeight()][map.getWidth()];
-        MapWriter.Direction[][] piDirections = new MapWriter.Direction[map.getHeight()][map.getWidth()];
+        MapWriter.Direction[][] directions = new MapWriter.Direction[map.getHeight()][map.getWidth()];
 
         for (int y = map.getHeight() - 1;y >= 0;y--) {
             for (int x = 0; x < map.getWidth(); x++) {
                 GridWorldState currentState = new GridWorldState(x, y);
-                if (viPolicy.action(currentState).actionName() == "east") {
-                    viDirections[y][x] = MapWriter.Direction.RIGHT;
-                } else if (viPolicy.action(currentState).actionName() == "west") {
-                    viDirections[y][x] = MapWriter.Direction.LEFT;
-                } else if (viPolicy.action(currentState).actionName() == "north") {
-                    viDirections[y][x] = MapWriter.Direction.UP;
-                } else if (viPolicy.action(currentState).actionName() == "south") {
-                    viDirections[y][x] = MapWriter.Direction.DOWN;
+                if (policy.action(currentState).actionName().equals("east")) {
+                    directions[y][x] = MapWriter.Direction.RIGHT;
+                } else if (policy.action(currentState).actionName().equals("west")) {
+                    directions[y][x] = MapWriter.Direction.LEFT;
+                } else if (policy.action(currentState).actionName().equals("north")) {
+                    directions[y][x] = MapWriter.Direction.UP;
+                } else if (policy.action(currentState).actionName().equals("south")) {
+                    directions[y][x] = MapWriter.Direction.DOWN;
+                } else {
+                    System.out.println(policy.action(currentState).actionName());
                 }
             }
         }
 
-        for (int y = map.getHeight() - 1;y >= 0;y--) {
-            for (int x = 0; x < map.getWidth(); x++) {
-                GridWorldState currentState = new GridWorldState(x, y);
-                if (piPolicy.action(currentState).actionName() == "east") {
-                    piDirections[y][x] = MapWriter.Direction.RIGHT;
-                } else if (piPolicy.action(currentState).actionName() == "west") {
-                    piDirections[y][x] = MapWriter.Direction.LEFT;
-                } else if (piPolicy.action(currentState).actionName() == "north") {
-                    piDirections[y][x] = MapWriter.Direction.UP;
-                } else if (piPolicy.action(currentState).actionName() == "south") {
-                    piDirections[y][x] = MapWriter.Direction.DOWN;
-                }
-            }
-        }
-
-        mapWriter.write(viDirections, "output/vi.png");
-        mapWriter.write(piDirections, "output/pi.png");
+        mapWriter.write(directions, "output/q.png");
     }
 }
