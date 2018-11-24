@@ -27,6 +27,7 @@ public final class App {
         {1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0},
         {1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
         {0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0},
+        {0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0},
         {0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0},
         {0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1},
         {0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0},
@@ -47,6 +48,10 @@ public final class App {
 
     private static Map smallMap;
     private static Map largeMap;
+
+    private static double DISCOUNT_FACTOR = 0.99;
+    private static double MAX_DELTA = 0.01;
+    private static int MAX_ITERATIONS = 1000;
 
     private App() {}
 
@@ -76,10 +81,10 @@ public final class App {
 
         GridWorldState state = new GridWorldState(new GridAgent(0, 0, "Start"));
 
-        ValueIteration vi = new ValueIteration(domain, 0.99, hashingFactory, 0.01, 1000);
+        ValueIteration vi = new ValueIteration(domain, DISCOUNT_FACTOR, hashingFactory, MAX_DELTA, MAX_ITERATIONS);
         GreedyQPolicy viPolicy = vi.planFromState(state);
 
-        PolicyIteration pi = new PolicyIteration(domain, 0.99, hashingFactory, 0.01, 1000, 1000);
+        PolicyIteration pi = new PolicyIteration(domain, DISCOUNT_FACTOR, hashingFactory, MAX_DELTA, 1000, MAX_ITERATIONS);
         GreedyQPolicy piPolicy = pi.planFromState(state);
 
         vi.toggleDebugPrinting(true);

@@ -19,9 +19,6 @@ public final class Profiling {
     private Profiling() {
     }
 
-    public static final int WIDTH = 4;
-    public static final int HEIGHT = 4;
-
     public static final double[][] map = new double[][]{
         {-0.04, -0.04,  -0.04,  -0.04},
         {-0.04, -1.0,   -0.04,  -1.0},
@@ -29,26 +26,65 @@ public final class Profiling {
         {-0.04, -0.04,  -0.04,   1.0},
     };
 
+    public static final int[][] smallMapLayout = new int[][]{
+        {0, 0, 0, 0},
+        {0, 1, 0, 1},
+        {0, 1, 0, 1},
+        {0, 0, 0, 2},
+    };
+
+    public static final int[][] largeMapLayout = new int[][]{
+        {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0},
+        {1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0},
+        {1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0},
+        {0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0},
+        {1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
+        {0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0},
+        {0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0},
+        {0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0},
+        {0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1},
+        {0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0},
+        {0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0},
+        {1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
+        {0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0},
+        {1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0},
+        {1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0},
+        {1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0},
+        {1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1},
+        {1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1},
+        {1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1},
+        {1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1},
+        {1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1},
+        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1},
+        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 2}
+    };
+
+    private static Map smallMap;
+    private static Map largeMap;
+
+    private static double DISCOUNT_FACTOR = 0.99;
+    private static double MAX_DELTA = 0.01;
+    private static int MAX_ITERATIONS = 1000;
+
     /**
      * Main function
      * @param args The arguments of the program.
      */
     public static void main(String[] args) {
         /* Initialization */
-        int height = map.length;
-        int width = map[0].length;
+        smallMap = new Map(smallMapLayout);
+        largeMap = new Map(largeMapLayout);
 
-        GridWorldDomain gw = new GridWorldDomain(width, height);
+        Map map = smallMap;
+
+        GridWorldDomain gw = new GridWorldDomain(map.getWidth(), map.getHeight());
         gw.setProbSucceedTransitionDynamics(0.9);
 
-        GridWorldRewardFunction rf = new GridWorldRewardFunction(width, height);
-        for (int y = 0;y < height;y++) {
-            for (int x = 0; x < width; x++) {
-                rf.setReward(x, y, map[y][x]);
-            }
-        }
-        TerminalFunction tf = new GridWorldTerminalFunction(3, 3);
+        GridWorldRewardFunction rf = new GridWorldRewardFunction(map.getWidth(), map.getHeight());
+        GridWorldTerminalFunction tf = new GridWorldTerminalFunction();
 
+        map.fillRewardFunctionAndTerminalFunction(rf, tf);
         gw.setRf(rf);
         gw.setTf(tf);
         
@@ -57,14 +93,14 @@ public final class Profiling {
 
         GridWorldState state = new GridWorldState(new GridAgent(0, 0, "Start"));
 
-        ValueIteration vi = new ValueIteration(domain, 0.99, hashingFactory, 0.01, 1000);
-        PolicyIteration pi = new PolicyIteration(domain, 0.99, hashingFactory, 0.01, 1000, 1000);
+        ValueIteration vi = new ValueIteration(domain, DISCOUNT_FACTOR, hashingFactory, MAX_DELTA, MAX_ITERATIONS);
+        PolicyIteration pi = new PolicyIteration(domain, DISCOUNT_FACTOR, hashingFactory, MAX_DELTA, 1000, MAX_ITERATIONS);
 
 
         vi.toggleDebugPrinting(false);
         long cumulatedComputeTime = 0;
         for (int i = 0;i < 1000;i++) {
-            vi = new ValueIteration(domain, 0.99, hashingFactory, 0.01, 1000);
+            vi = new ValueIteration(domain, DISCOUNT_FACTOR, hashingFactory, MAX_DELTA, MAX_ITERATIONS);
 
             long begin = System.nanoTime();
             vi.planFromState(state);
@@ -76,7 +112,7 @@ public final class Profiling {
 
         cumulatedComputeTime = 0;
         for (int i = 0;i < 1000;i++) {
-            pi = new PolicyIteration(domain, 0.99, hashingFactory, 0.01, 1000, 1000);
+            pi = new PolicyIteration(domain, DISCOUNT_FACTOR, hashingFactory, MAX_DELTA, 1000, MAX_ITERATIONS);
             
             long begin = System.nanoTime();
             pi.planFromState(state);

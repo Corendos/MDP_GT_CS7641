@@ -2,6 +2,9 @@ import mdptoolbox.example
 import numpy as np
 from PIL import Image
 
+ITERATIONS = 1000000
+DISCOUNT_FACTOR = 0.9
+
 actions = 4
 p = 0.9
 
@@ -48,8 +51,8 @@ northImage = Image.open('../mdp/assets/up.png')
 southImage = Image.open('../mdp/assets/down.png')
 imageSize = 8
 
-map = largeMap
-height, width = map.shape
+MAP = largeMap
+height, width = MAP.shape
 
 outputImage = Image.new('RGBA', (width * imageSize, height * imageSize), 'white')
 
@@ -342,8 +345,8 @@ def computeTransitionAndRewardMatrix(map_layout):
                     R[state][3] = getRewardFromMap(map_layout, x, y - 1)
     return P, R
 
-P, R = computeTransitionAndRewardMatrix(map)
-ql = mdptoolbox.mdp.QLearning(P, R, 0.9, 10000000)
+P, R = computeTransitionAndRewardMatrix(MAP)
+ql = mdptoolbox.mdp.QLearning(P, R, DISCOUNT_FACTOR, ITERATIONS)
 ql.run()
 
 for y in range(height - 1, -1, -1):
