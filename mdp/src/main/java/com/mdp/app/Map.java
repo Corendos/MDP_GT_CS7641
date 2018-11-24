@@ -8,6 +8,10 @@ public class Map {
     int width;
     int height;
 
+    private final double goalReward = 10.0;
+    private final double frozenCellReward = -0.04;
+    private final double holeReward = -10.0;
+
     Map(int[][] mapLayout) {
         width = mapLayout[0].length;
         height = mapLayout.length;
@@ -21,11 +25,11 @@ public class Map {
         for (int y = 0;y < height;y++) {
             for (int x = 0;x < width;x++) {
                 if (map[y][x] == 0) {
-                    rf.setReward(x, y, -0.04);
+                    rf.setReward(x, y, frozenCellReward);
                 } else if (map[y][x] == 1) {
-                    rf.setReward(x, y, -10.0);
+                    rf.setReward(x, y, holeReward);
                 } else if (map[y][x] == 2) {
-                    rf.setReward(x, y, 10.0);
+                    rf.setReward(x, y, goalReward);
                     tf.markAsTerminalPosition(x, y);
                 }
             }   

@@ -87,10 +87,11 @@ public final class QLearningApp {
 
         SimulatedEnvironment env = new SimulatedEnvironment(domain, state);
 
-        QLearning learner = new QLearning(domain, 0.9, hashingFactory, 10.0, 0.9);
+        QLearning learner = new QLearning(domain, 0.99, hashingFactory, 0.0, 0.5);
         learner.toggleDebugPrinting(true);
-        for (int i = 0;i < 100000000;i++) {
+        for (int i = 0;i < 100000;i++) {
             learner.runLearningEpisode(env);
+            learner.setLearningPolicy(learner.planFromState(state));
         }
 
         GreedyQPolicy policy = learner.planFromState(state);
@@ -100,16 +101,18 @@ public final class QLearningApp {
         for (int y = map.getHeight() - 1;y >= 0;y--) {
             for (int x = 0; x < map.getWidth(); x++) {
                 GridWorldState currentState = new GridWorldState(x, y);
-                if (policy.action(currentState).actionName().equals("east")) {
+                System.out.println(policy.policyDistribution(currentState));
+                String actionName = policy.action(currentState).actionName();
+                if (actionName.equals("east")) {
                     directions[y][x] = MapWriter.Direction.RIGHT;
-                } else if (policy.action(currentState).actionName().equals("west")) {
+                } else if (actionName.equals("west")) {
                     directions[y][x] = MapWriter.Direction.LEFT;
-                } else if (policy.action(currentState).actionName().equals("north")) {
+                } else if (actionName.equals("north")) {
                     directions[y][x] = MapWriter.Direction.UP;
-                } else if (policy.action(currentState).actionName().equals("south")) {
+                } else if (actionName.equals("south")) {
                     directions[y][x] = MapWriter.Direction.DOWN;
                 } else {
-                    System.out.println(policy.action(currentState).actionName());
+                    System.out.println(actionName);
                 }
             }
         }
