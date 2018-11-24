@@ -63,7 +63,7 @@ public final class App {
         smallMap = new Map(smallMapLayout);
         largeMap = new Map(largeMapLayout);
 
-        Map map = smallMap;
+        Map map = largeMap;
         MapWriter mapWriter = new MapWriter();
         
         GridWorldDomain gw = new GridWorldDomain(map.getWidth(), map.getHeight());

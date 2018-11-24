@@ -8,9 +8,9 @@ public class Map {
     int width;
     int height;
 
-    private final double goalReward = 10.0;
+    private final double goalReward = 1.0;
     private final double frozenCellReward = -0.04;
-    private final double holeReward = -10.0;
+    private final double holeReward = -1.0;
 
     Map(int[][] mapLayout) {
         width = mapLayout[0].length;
